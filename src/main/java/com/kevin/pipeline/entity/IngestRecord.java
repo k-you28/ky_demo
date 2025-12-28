@@ -20,6 +20,9 @@ public class IngestRecord {
 
     private String requestKey;
 
+    private String userName;
+    private String userMessage;
+
     public IngestRecord() {
         this.id = UUID.randomUUID().toString();
         this.createdAt = Instant.now();
@@ -29,6 +32,14 @@ public class IngestRecord {
         this.id = UUID.randomUUID().toString();
         this.createdAt = Instant.now();
         this.clientIp = clientIp;
+    }
+
+    public IngestRecord(String clientIp, String name, String message) {
+        this.id = UUID.randomUUID().toString();
+        this.createdAt = Instant.now();
+        this.clientIp = clientIp;
+        this.userName = name;
+        this.userMessage = message;
     }
 
     public String getId() {

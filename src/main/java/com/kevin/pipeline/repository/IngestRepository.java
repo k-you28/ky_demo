@@ -8,5 +8,7 @@ public interface IngestRepository extends JpaRepository<IngestRecord, String> {
 
     public Optional<IngestRecord> findByRequestKey(String idempotencyKey);
 
+    public Optional<IngestRecord> findTopByClientIpOrderByCreatedAtDesc(String clientIp);
+
 }
 

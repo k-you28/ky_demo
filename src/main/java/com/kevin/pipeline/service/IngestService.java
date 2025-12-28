@@ -10,6 +10,7 @@ import com.kevin.pipeline.repository.IngestRepository;
 import com.kevin.pipeline.entity.IngestRecord;
 
 import java.time.Instant;
+import java.time.LocalDateTime;
 import java.util.Optional;
 import java.util.UUID;
 
@@ -40,6 +41,33 @@ public class IngestService {
 		}
 
 		IngestRecord record = new IngestRecord();
+		record.setId(UUID.randomUUID().toString());
+		record.setRequestKey(key);
+		return ingestRepository.save(record);
+	}
+
+	@Transactional
+	public IngestRecord ingest(String key, String ip, String userName, String userMessage) {
+		/*Optional<IngestRecord> existing =
+				ingestRepository.findByRequestKey(key);
+
+		if (existing.isPresent()) {
+			System.out.print("DUP REQUEST MADE WHEN WRITING TO DB");
+			return existing.get();
+		}*/
+
+		Optional<IngestRecord> lastRecordOpt = ingestRepository.findTopByClientIpOrderByCreatedAtDesc(ip);
+
+		Instant now = Instant.now();
+		if (lastRecordOpt.isPresent()) {
+			Instant lastTime = lastRecordOpt.get().getCreatedAt();
+			if (lastTime.plusSeconds(2).isAfter(now)) {
+				throw new RuntimeException("Rate limit exceeded. Please wait before retrying.");
+			}
+		}
+
+
+		IngestRecord record = new IngestRecord(ip, userName, userMessage);
 		record.setId(UUID.randomUUID().toString());
 		record.setRequestKey(key);
 		return ingestRepository.save(record);
