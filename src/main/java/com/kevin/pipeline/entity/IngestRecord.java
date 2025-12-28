@@ -42,21 +42,17 @@ public class IngestRecord {
         this.userMessage = message;
     }
 
-    public String getId() {
-        return id;
-    }
+    public String getId() {return id;}
     public void setId(String newID){this.id = newID;}
 
-    public Instant getCreatedAt() {
-        return createdAt;
-    }
+    public Instant getCreatedAt() {return createdAt;}
+    public void setCreatedAt(Instant newTime){} //Leaving unimplemented, no reason to change created time
 
-    public String getClientIp() {
-        return clientIp;
-    }
+    public String getClientIp() { return clientIp; }
+    public void setClientIp(){} //No reason to change IP manually
 
+    public String getRequestKey(){return this.requestKey;}
+    public void setRequestKey(String key) { this.requestKey = key; }
+    
 
-    public void setRequestKey(String key) {
-        this.requestKey = key;
-    }
 }
