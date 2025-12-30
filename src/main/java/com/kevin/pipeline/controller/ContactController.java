@@ -24,7 +24,7 @@ public class ContactController {
     }
 
     @PostMapping("/contactUs")
-    public String handleSubmit(@RequestHeader(value="Idempotency-Key", required=false) String RequestKey, HttpServletRequest request, @RequestParam String name, @RequestParam String message, Model model) {
+    public String handleSubmit(@RequestHeader(value="Idempotency-Key", required=false) String RequestKey, HttpServletRequest request, @RequestParam("name") String name, @RequestParam("message") String message, Model model) {
         // For now, just echo back what was submitted
         model.addAttribute("name", name);
         model.addAttribute("message", message);
