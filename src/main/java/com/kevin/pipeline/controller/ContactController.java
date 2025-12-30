@@ -31,8 +31,8 @@ public class ContactController {
         String ip = request.getRemoteAddr();
         IngestRecord record = ingestService.ingest(RequestKey, ip, name, message);
 
-        return "contactUs";
-        //return "redirect:/contactUs?success=true";
+        //return "contactUs";
+        return "redirect:/contactUs?success=true";
     }
 
 }
