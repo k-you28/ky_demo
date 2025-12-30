@@ -1,5 +1,6 @@
 package com.kevin.pipeline.controller;
 
+import java.util.List;
 import java.util.Map;
 import com.kevin.pipeline.entity.IngestRecord;
 import org.springframework.http.ResponseEntity;
@@ -20,11 +21,17 @@ public class IngestController {
         this.ingestService = ingestService;
     }
 
+    /*
     @GetMapping
     public Map<String, String> ingest(HttpServletRequest request) {
         String clientIp = extractClientIp(request);
         String id = ingestService.getClientIP(clientIp);
         return Map.of("requestId", id);
+    } */
+    
+    @GetMapping
+    public List<IngestRecord> ingest(HttpServletRequest request) {
+    	return ingestService.getDatabaseContents();
     }
 
     @PostMapping

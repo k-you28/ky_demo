@@ -11,6 +11,7 @@ import com.kevin.pipeline.entity.IngestRecord;
 
 import java.time.Instant;
 import java.time.LocalDateTime;
+import java.util.List;
 import java.util.Optional;
 import java.util.UUID;
 
@@ -44,6 +45,10 @@ public class IngestService {
 		record.setId(UUID.randomUUID().toString());
 		record.setRequestKey(key);
 		return ingestRepository.save(record);
+	}
+	
+	public List<IngestRecord> getDatabaseContents() {
+		return this.ingestRepository.findAll();
 	}
 
 	@Transactional

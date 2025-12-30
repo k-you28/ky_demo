@@ -54,5 +54,10 @@ public class IngestRecord {
     public String getRequestKey(){return this.requestKey;}
     public void setRequestKey(String key) { this.requestKey = key; }
     
+    public String getUserName() { return this.userName; }
+    public void setUserName(String newName) {this.userName = newName; }
+    
+    public String getUserMessage() { return this.userMessage; }
+    public void setUserMessage(String newMessage) {this.userMessage = newMessage; }
 
 }

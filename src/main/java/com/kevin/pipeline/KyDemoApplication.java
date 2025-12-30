@@ -7,7 +7,6 @@ import org.springframework.boot.autoconfigure.SpringBootApplication;
 public class KyDemoApplication {
 
 	public static void main(String[] args) {
-		System.out.println("Thisis a test");
 		SpringApplication.run(KyDemoApplication.class, args);
 	}
 
