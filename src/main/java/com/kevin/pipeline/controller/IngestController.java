@@ -20,14 +20,6 @@ public class IngestController {
 
         this.ingestService = ingestService;
     }
-
-    /*
-    @GetMapping
-    public Map<String, String> ingest(HttpServletRequest request) {
-        String clientIp = extractClientIp(request);
-        String id = ingestService.getClientIP(clientIp);
-        return Map.of("requestId", id);
-    } */
     
     @GetMapping
     public List<IngestRecord> ingest(HttpServletRequest request) {

@@ -42,6 +42,15 @@ public class IngestRecord {
         this.userMessage = message;
     }
 
+    public IngestRecord(String requestKey, String clientIp, String name, String message) {
+        this.id = requestKey;
+        this.createdAt = Instant.now();
+        this.clientIp = clientIp;
+        this.userName = name;
+        this.userMessage = message;
+        this.requestKey = requestKey;
+    }
+
     public String getId() {return id;}
     public void setId(String newID){this.id = newID;}
 

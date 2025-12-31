@@ -8,6 +8,7 @@
 <h2>Contact Us</h2>
 
 <form method="post" action="/contactUs">
+    <input type="hidden" name="idempotencyKey" value="${idempotencyKey}" />
     <label>
         Name:
         <input type="text" name="name" />
