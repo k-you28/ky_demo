@@ -23,9 +23,7 @@ public class ContactController {
     public String showForm(HttpSession session,
                            Model model) {
         String key = UUID.randomUUID().toString();
-        //session.setAttribute("IDEMPOTENCY_KEY", key);
         model.addAttribute("idempotencyKey", key);
-        //session.removeAttribute("IDEMPOTENCY_KEY");
         return "contactUs";
     }
 
@@ -37,7 +35,7 @@ public class ContactController {
                                Model model) {
 
         String ip = request.getRemoteAddr();
-        System.out.println("REQUEST KEY: " + RequestKey);
+        //System.out.println("REQUEST KEY: " + RequestKey);
         IngestRecord record = ingestService.ingest(RequestKey, ip, name, message);
         return "redirect:/contactUs?success=true";
     }

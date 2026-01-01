@@ -1,8 +1,6 @@
 package com.kevin.pipeline.entity;
 
-import jakarta.persistence.Entity;
-import jakarta.persistence.Id;
-import jakarta.persistence.Table;
+import jakarta.persistence.*;
 
 import java.time.Instant;
 import java.util.UUID;
@@ -12,30 +10,32 @@ import java.util.UUID;
 public class IngestRecord {
 
     @Id
+    @GeneratedValue(strategy = GenerationType.UUID)
     private String id;
 
     private Instant createdAt;
 
     private String clientIp;
 
+    @Column(unique = true, nullable = false)
     private String requestKey;
 
     private String userName;
     private String userMessage;
 
     public IngestRecord() {
-        this.id = UUID.randomUUID().toString();
+        //this.id = UUID.randomUUID().toString();
         this.createdAt = Instant.now();
     }
 
     public IngestRecord(String clientIp) {
-        this.id = UUID.randomUUID().toString();
+        //this.id = UUID.randomUUID().toString();
         this.createdAt = Instant.now();
         this.clientIp = clientIp;
     }
 
     public IngestRecord(String clientIp, String name, String message) {
-        this.id = UUID.randomUUID().toString();
+        //this.id = UUID.randomUUID().toString();
         this.createdAt = Instant.now();
         this.clientIp = clientIp;
         this.userName = name;
@@ -43,7 +43,7 @@ public class IngestRecord {
     }
 
     public IngestRecord(String requestKey, String clientIp, String name, String message) {
-        this.id = requestKey;
+        //this.id = requestKey;
         this.createdAt = Instant.now();
         this.clientIp = clientIp;
         this.userName = name;
