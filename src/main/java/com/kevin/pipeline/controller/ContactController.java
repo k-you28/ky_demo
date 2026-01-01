@@ -20,28 +20,25 @@ public class ContactController {
     }
 
     @GetMapping("/contactUs")
-    public String showForm(HttpSession session, Model model) {
+    public String showForm(HttpSession session,
+                           Model model) {
         String key = UUID.randomUUID().toString();
-        session.setAttribute("IDEMPOTENCY_KEY", key);
-
+        //session.setAttribute("IDEMPOTENCY_KEY", key);
         model.addAttribute("idempotencyKey", key);
-        session.removeAttribute("IDEMPOTENCY_KEY");
+        //session.removeAttribute("IDEMPOTENCY_KEY");
         return "contactUs";
     }
 
     @PostMapping("/contactUs")
-    public String handleSubmit(@RequestHeader(value="Idempotency-Key", required=false) String RequestKey,
+    public String handleSubmit(@RequestParam("idempotencyKey") String RequestKey,
                                HttpServletRequest request,
                                @RequestParam("name") String name,
                                @RequestParam("message") String message,
                                Model model) {
 
-        // For now, just echo back what was submitted
-        model.addAttribute("name", name);
-        model.addAttribute("message", message);
         String ip = request.getRemoteAddr();
+        System.out.println("REQUEST KEY: " + RequestKey);
         IngestRecord record = ingestService.ingest(RequestKey, ip, name, message);
-        return "contactUs";
+        return "redirect:/contactUs?success=true";
     }
-
 }

@@ -29,7 +29,7 @@ public class IngestController {
     @PostMapping
     public ResponseEntity<?> ingest(@RequestHeader("Idempotency-Key") String RequestKey, HttpServletRequest request) {
         String ip = request.getRemoteAddr();
-        IngestRecord record = ingestService.ingest(RequestKey, ip);
+        IngestRecord record = ingestService.ingest(RequestKey, ip, ip, "Post Request Processing...");
         return ResponseEntity.ok(record.getId());
     }
 

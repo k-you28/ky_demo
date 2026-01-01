@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html xmlns:th="http://www.thymeleaf.org">
+<html xmlns:th="http://www.thymeleaf.org" lang="">
 <head>
     <title>Contact Us</title>
 </head>
@@ -8,7 +8,7 @@
 <h2>Contact Us</h2>
 
 <form method="post" action="/contactUs">
-    <input type="hidden" name="idempotencyKey" value="${idempotencyKey}" />
+    <input type="hidden" name="idempotencyKey" th:value="${idempotencyKey}" />
     <label>
         Name:
         <input type="text" name="name" />
