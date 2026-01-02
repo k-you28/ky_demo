@@ -1,5 +1,6 @@
 package com.kevin.pipeline.service;
 
+import com.kevin.pipeline.metrics.IngestMetrics;
 import jakarta.transaction.Transactional;
 import org.springframework.stereotype.Service;
 import com.kevin.pipeline.repository.IngestRepository;
@@ -12,9 +13,12 @@ import java.util.Optional;
 public class IngestService {
 
 	private final IngestRepository ingestRepository;
+	private final IngestMetrics ingestMetrics;
 
-	public IngestService(IngestRepository ingestRepo) {
+	public IngestService(IngestRepository ingestRepo, IngestMetrics ingestMetrics) {
+
 		this.ingestRepository = ingestRepo;
+		this.ingestMetrics = ingestMetrics;
 	}
 
 	@Transactional
@@ -24,6 +28,8 @@ public class IngestService {
 			String userName,
 			String userMessage
 	) {
+
+
 		if (userName == null || userName.isBlank()
 				|| userMessage == null || userMessage.isBlank()) {
 			throw new IllegalArgumentException("Name and message required");
@@ -35,6 +41,7 @@ public class IngestService {
 
 		Optional<IngestRecord> existing = ingestRepository.findByRequestKey(key);
 		if (existing.isPresent()) {
+			this.ingestMetrics.recordReplayed();
 			return existing.get();
 		}
 
@@ -44,6 +51,7 @@ public class IngestService {
 		if (lastRecordOpt.isPresent()) {
 			Instant lastTime = lastRecordOpt.get().getCreatedAt();
 			if (lastTime.plusSeconds(2).isAfter(now)) {
+				ingestMetrics.recordRateLimited();
 				throw new IllegalStateException("Rate limit exceeded");
 			}
 		}
@@ -51,6 +59,7 @@ public class IngestService {
 		IngestRecord record = new IngestRecord(ip, userName, userMessage);
 		record.setRequestKey(key);
 		record.setCreatedAt(now);
+		this.ingestMetrics.recordCreated();
 		return ingestRepository.save(record);
 	}
 
