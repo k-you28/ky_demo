@@ -1,12 +1,10 @@
 package com.kevin.pipeline.entity;
 
 import jakarta.persistence.*;
-
 import java.time.Instant;
-import java.util.UUID;
 
 @Entity
-@Table(name = "KY_DB")
+@Table(name = "KY_DB", uniqueConstraints = {@UniqueConstraint(columnNames = "request_key")})
 public class IngestRecord {
 
     @Id
@@ -24,12 +22,10 @@ public class IngestRecord {
     private String userMessage;
 
     public IngestRecord() {
-        //this.id = UUID.randomUUID().toString();
         this.createdAt = Instant.now();
     }
 
     public IngestRecord(String clientIp) {
-        //this.id = UUID.randomUUID().toString();
         this.createdAt = Instant.now();
         this.clientIp = clientIp;
     }

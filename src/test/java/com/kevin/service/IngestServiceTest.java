@@ -7,8 +7,8 @@ import com.kevin.pipeline.entity.IngestRecord;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.mockito.*;
-
 import java.util.Optional;
+
 import static org.assertj.core.api.Assertions.*;
 import static org.mockito.Mockito.*;
 
@@ -35,7 +35,7 @@ public class IngestServiceTest {
         IngestRecord saved = new IngestRecord(key, ip, "Kevin", "Hello");
         when(testRepo.save(any())).thenReturn(saved);
         IngestRecord result = testService.ingest(key, ip, "Kevin", "Hello");
-        
+
         assertThat(result).isNotNull();
 
         verify(testRepo).save(any());
@@ -57,7 +57,5 @@ public class IngestServiceTest {
         assertThat(testMetrics.replayedCount()).isEqualTo(1);
         assertThat(testMetrics.createdCount()).isEqualTo(0);
     }
-
-
 
 }

@@ -16,7 +16,6 @@ public class IngestService {
 	private final IngestMetrics ingestMetrics;
 
 	public IngestService(IngestRepository ingestRepo, IngestMetrics ingestMetrics) {
-
 		this.ingestRepository = ingestRepo;
 		this.ingestMetrics = ingestMetrics;
 	}
@@ -38,6 +37,7 @@ public class IngestService {
 		if (key == null || key.isBlank()) {
 			throw new IllegalArgumentException("Idempotency key required");
 		}
+
 
 		Optional<IngestRecord> existing = ingestRepository.findByRequestKey(key);
 		if (existing.isPresent()) {
