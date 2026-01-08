@@ -1,5 +1,8 @@
 package com.kevin.pipeline.metrics;
 
+import java.time.Instant;
+import java.time.Duration;
+
 import org.springframework.stereotype.Component;
 import java.util.concurrent.atomic.AtomicLong;
 
@@ -9,8 +12,12 @@ public class IngestMetrics {
     private final AtomicLong created = new AtomicLong();
     private final AtomicLong replayed = new AtomicLong();
     private final AtomicLong rateLimited = new AtomicLong();
+    private final Instant startTime;
+    
 
-    public IngestMetrics(){}
+    public IngestMetrics(){
+    	this.startTime = Instant.now();
+    }
 
     public void recordCreated() {
         created.incrementAndGet();
@@ -35,4 +42,9 @@ public class IngestMetrics {
     public long rateLimitedCount() {
         return rateLimited.get();
     }
+    
+    public Long appRuntime() {
+    	return Duration.between(startTime, Instant.now()).toSeconds();
+    }
+    
 }

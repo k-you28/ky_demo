@@ -14,6 +14,17 @@ public class MetricsController {
     public MetricsController(IngestMetrics ingestMetrics) {
         this.ingestMetrics = ingestMetrics;
     }
+    
+    @GetMapping
+    public Map<String, String> getMetrics() {
+    	String idempotency = this.idempotencyMetrics().toString();
+    	String lifetime = this.appLifetimeLength();
+    	
+    	return Map.of(
+    			"Idempotency: ", idempotency,
+    			"Application Lifetime: ", lifetime
+    			);
+    }
 
     @GetMapping("/idempotency")
     public Map<String, Long> idempotencyMetrics() {
@@ -22,6 +33,11 @@ public class MetricsController {
                 "replayed", ingestMetrics.replayedCount(),
                 "rateLimited", ingestMetrics.rateLimitedCount()
         );
+    }
+    
+    @GetMapping("/appLifetime")
+    public String appLifetimeLength() {
+    	return ingestMetrics.appRuntime().toString() + " seconds";
     }
 
 }
