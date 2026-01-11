@@ -1,9 +1,9 @@
 package com.kevin.service;
 
 import com.kevin.pipeline.repository.IngestRepository;
-import com.kevin.pipeline.service.IngestService;
+import com.kevin.pipeline.service.WebhookIngestService;
 import com.kevin.pipeline.metrics.IngestMetrics;
-import com.kevin.pipeline.entity.IngestRecord;
+import com.kevin.pipeline.entity.WebhookEvent;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.mockito.*;
@@ -12,18 +12,18 @@ import java.util.Optional;
 import static org.assertj.core.api.Assertions.*;
 import static org.mockito.Mockito.*;
 
-public class IngestServiceTest {
+public class WebhookIngestServiceTest {
 
     @Mock
     private IngestRepository testRepo;
-    private IngestService testService;
+    private WebhookIngestService testService;
     private IngestMetrics testMetrics;
 
     @BeforeEach
     void setUp() {
         MockitoAnnotations.openMocks(this);
         testMetrics = new IngestMetrics();
-        testService = new IngestService(testRepo, testMetrics);
+        testService = new WebhookIngestService(testRepo, testMetrics);
     }
 
     @Test
@@ -32,9 +32,9 @@ public class IngestServiceTest {
         String ip = "127.0.0.1";
 
         when(testRepo.findByRequestKey(key)).thenReturn(Optional.empty());
-        IngestRecord saved = new IngestRecord(key, ip, "Kevin", "Hello");
+        WebhookEvent saved = new WebhookEvent(key, ip, "Kevin", "Hello");
         when(testRepo.save(any())).thenReturn(saved);
-        IngestRecord result = testService.ingest(key, ip, "Kevin", "Hello");
+        WebhookEvent result = testService.ingest(key, ip, "Kevin", "Hello");
 
         assertThat(result).isNotNull();
 
@@ -48,9 +48,9 @@ public class IngestServiceTest {
         String key = "ky_test";
         String ip = "127.0.0.1";
 
-        IngestRecord existing = new IngestRecord(key, ip, "Kevin", "Hello");
+        WebhookEvent existing = new WebhookEvent(key, ip, "Kevin", "Hello");
         when(testRepo.findByRequestKey(key)).thenReturn(Optional.of(existing));
-        IngestRecord result = testService.ingest(key, ip, "Kevin", "Hello");
+        WebhookEvent result = testService.ingest(key, ip, "Kevin", "Hello");
 
         assertThat(result).isSameAs(existing);
         verify(testRepo, never()).save(any());

@@ -1,35 +1,34 @@
 package com.kevin.pipeline.controller;
 
 import java.util.List;
-import java.util.Map;
-import com.kevin.pipeline.entity.IngestRecord;
+
+import com.kevin.pipeline.entity.WebhookEvent;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import jakarta.servlet.http.HttpServletRequest;
-import com.kevin.pipeline.model.IngestRequest;
-import com.kevin.pipeline.service.IngestService;
+import com.kevin.pipeline.service.WebhookIngestService;
 
 @RestController
-@RequestMapping("/ingest")
+@RequestMapping("/webhook")
 public class IngestController {
 
-    private final IngestService ingestService;
+    private final WebhookIngestService WebhookIngestService;
 
-    public IngestController(IngestService ingestService) {
+    public IngestController(WebhookIngestService WebhookIngestService) {
 
-        this.ingestService = ingestService;
+        this.WebhookIngestService = WebhookIngestService;
     }
-    
+
     @GetMapping
-    public List<IngestRecord> ingest(HttpServletRequest request) {
-    	return ingestService.getDatabaseContents();
+    public List<WebhookEvent> ingest(HttpServletRequest request) {
+    	return WebhookIngestService.getDatabaseContents();
     }
 
     @PostMapping
     public ResponseEntity<?> ingest(@RequestHeader("Idempotency-Key") String RequestKey, HttpServletRequest request) {
         String ip = request.getRemoteAddr();
-        IngestRecord record = ingestService.ingest(RequestKey, ip, ip, "Post Request Processing...");
+        WebhookEvent record = WebhookIngestService.ingest(RequestKey, ip, ip, "Post Request Processing...");
         return ResponseEntity.ok(record.getId());
     }
 

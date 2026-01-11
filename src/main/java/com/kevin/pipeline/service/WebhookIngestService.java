@@ -4,24 +4,24 @@ import com.kevin.pipeline.metrics.IngestMetrics;
 import jakarta.transaction.Transactional;
 import org.springframework.stereotype.Service;
 import com.kevin.pipeline.repository.IngestRepository;
-import com.kevin.pipeline.entity.IngestRecord;
+import com.kevin.pipeline.entity.WebhookEvent;
 import java.time.Instant;
 import java.util.List;
 import java.util.Optional;
 
 @Service
-public class IngestService {
+public class WebhookIngestService {
 
 	private final IngestRepository ingestRepository;
 	private final IngestMetrics ingestMetrics;
 
-	public IngestService(IngestRepository ingestRepo, IngestMetrics ingestMetrics) {
+	public WebhookIngestService(IngestRepository ingestRepo, IngestMetrics ingestMetrics) {
 		this.ingestRepository = ingestRepo;
 		this.ingestMetrics = ingestMetrics;
 	}
 
 	@Transactional
-	public IngestRecord ingest(
+	public WebhookEvent ingest(
 			String key,
 			String ip,
 			String userName,
@@ -39,13 +39,13 @@ public class IngestService {
 		}
 
 
-		Optional<IngestRecord> existing = ingestRepository.findByRequestKey(key);
+		Optional<WebhookEvent> existing = ingestRepository.findByRequestKey(key);
 		if (existing.isPresent()) {
 			this.ingestMetrics.recordReplayed();
 			return existing.get();
 		}
 
-		Optional<IngestRecord> lastRecordOpt = ingestRepository.findTopByClientIpOrderByCreatedAtDesc(ip);
+		Optional<WebhookEvent> lastRecordOpt = ingestRepository.findTopByClientIpOrderByCreatedAtDesc(ip);
 		Instant now = Instant.now();
 
 		if (lastRecordOpt.isPresent()) {
@@ -56,7 +56,7 @@ public class IngestService {
 			}
 		}
 
-		IngestRecord record = new IngestRecord(ip, userName, userMessage);
+		WebhookEvent record = new WebhookEvent(ip, userName, userMessage);
 		record.setRequestKey(key);
 		record.setCreatedAt(now);
 		this.ingestMetrics.recordCreated();
@@ -64,13 +64,13 @@ public class IngestService {
 	}
 
 	//Note: Need get method to return contents properly for all data points
-	public List<IngestRecord> getDatabaseContents() {
+	public List<WebhookEvent> getDatabaseContents() {
 		return this.ingestRepository.findAll();
 	}
 
 	//Extract client ip
 	public String getClientIP(String clientIp) {
-		IngestRecord record = new IngestRecord(clientIp);
+		WebhookEvent record = new WebhookEvent(clientIp);
 		ingestRepository.save(record);
 		return record.getId();
 	}

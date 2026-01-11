@@ -5,7 +5,7 @@ import java.time.Instant;
 
 @Entity
 @Table(name = "KY_DB", uniqueConstraints = {@UniqueConstraint(columnNames = "request_key")})
-public class IngestRecord {
+public class WebhookEvent {
 
     @Id
     @GeneratedValue(strategy = GenerationType.UUID)
@@ -21,16 +21,16 @@ public class IngestRecord {
     private String userName;
     private String userMessage;
 
-    public IngestRecord() {
+    public WebhookEvent() {
         this.createdAt = Instant.now();
     }
 
-    public IngestRecord(String clientIp) {
+    public WebhookEvent(String clientIp) {
         this.createdAt = Instant.now();
         this.clientIp = clientIp;
     }
 
-    public IngestRecord(String clientIp, String name, String message) {
+    public WebhookEvent(String clientIp, String name, String message) {
         //this.id = UUID.randomUUID().toString();
         this.createdAt = Instant.now();
         this.clientIp = clientIp;
@@ -38,7 +38,7 @@ public class IngestRecord {
         this.userMessage = message;
     }
 
-    public IngestRecord(String requestKey, String clientIp, String name, String message) {
+    public WebhookEvent(String requestKey, String clientIp, String name, String message) {
         //this.id = requestKey;
         this.createdAt = Instant.now();
         this.clientIp = clientIp;

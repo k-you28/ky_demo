@@ -1,17 +1,17 @@
 package com.kevin.pipeline.repository;
 
-import com.kevin.pipeline.entity.IngestRecord;
+import com.kevin.pipeline.entity.WebhookEvent;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.config.EnableJpaRepositories;
 
 import java.util.Optional;
 
 @EnableJpaRepositories
-public interface IngestRepository extends JpaRepository<IngestRecord, String> {
+public interface IngestRepository extends JpaRepository<WebhookEvent, String> {
 
-    public Optional<IngestRecord> findByRequestKey(String idempotencyKey);
+    public Optional<WebhookEvent> findByRequestKey(String idempotencyKey);
 
-    public Optional<IngestRecord> findTopByClientIpOrderByCreatedAtDesc(String clientIp);
+    public Optional<WebhookEvent> findTopByClientIpOrderByCreatedAtDesc(String clientIp);
 
 }
 

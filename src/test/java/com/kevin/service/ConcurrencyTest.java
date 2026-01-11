@@ -2,7 +2,7 @@ package com.kevin.service;
 
 import com.kevin.pipeline.KyDemoApplication;
 import com.kevin.pipeline.repository.IngestRepository;
-import com.kevin.pipeline.service.IngestService;
+import com.kevin.pipeline.service.WebhookIngestService;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
@@ -18,7 +18,7 @@ import static org.assertj.core.api.Assertions.*;
 class ConcurrencyTest {
 
     @Autowired
-    private IngestService ingestService;
+    private WebhookIngestService WebhookIngestService;
 
     @Autowired
     private IngestRepository ingestRepository;
@@ -40,7 +40,7 @@ class ConcurrencyTest {
             executor.submit(() -> {
                 try {
                     start.await();
-                    ingestService.ingest(key, ip, "Kevin", "Hello");
+                    WebhookIngestService.ingest(key, ip, "Kevin", "Hello");
                 } catch (Throwable t) {
                     failures.add(t);
                 } finally {
