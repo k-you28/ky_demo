@@ -13,7 +13,9 @@ public class IngestMetrics {
     private final AtomicLong replayed = new AtomicLong();
     private final AtomicLong rateLimited = new AtomicLong();
     private final Instant startTime;
-    
+    private final AtomicLong deadLettered = new AtomicLong();
+
+
 
     public IngestMetrics(){
     	this.startTime = Instant.now();
@@ -46,5 +48,13 @@ public class IngestMetrics {
     public Long appRuntime() {
     	return Duration.between(startTime, Instant.now()).toSeconds();
     }
-    
+
+    public void recordDeadLetter() {
+        deadLettered.incrementAndGet();
+    }
+
+    public long deadLetterCount() {
+        return deadLettered.get();
+    }
+
 }
