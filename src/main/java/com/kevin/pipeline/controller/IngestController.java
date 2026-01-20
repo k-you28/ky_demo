@@ -41,5 +41,3 @@ public class IngestController {
         return request.getRemoteAddr();
     }
 }
-
-

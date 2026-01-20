@@ -1,21 +1,27 @@
 package com.kevin.service;
 
-import com.kevin.pipeline.repository.DeadLetterRepository;
+import java.util.Optional;
+
+import static org.assertj.core.api.Assertions.assertThat;
+import static org.assertj.core.api.Assertions.catchThrowable;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
+import org.mockito.ArgumentCaptor;
+import static org.mockito.ArgumentMatchers.any;
+import org.mockito.InjectMocks;
+import org.mockito.Mock;
+import static org.mockito.Mockito.never;
+import static org.mockito.Mockito.verify;
+import static org.mockito.Mockito.when;
+import org.mockito.MockitoAnnotations;
+
 import com.kevin.pipeline.entity.DeadLetterEvent;
+import com.kevin.pipeline.entity.WebhookEvent;
+import com.kevin.pipeline.metrics.IngestMetrics;
+import com.kevin.pipeline.repository.DeadLetterRepository;
 import com.kevin.pipeline.repository.IngestRepository;
 import com.kevin.pipeline.service.DeadLetterService;
 import com.kevin.pipeline.service.WebhookIngestService;
-import com.kevin.pipeline.metrics.IngestMetrics;
-import com.kevin.pipeline.entity.WebhookEvent;
-import org.junit.jupiter.api.BeforeEach;
-import org.junit.jupiter.api.Test;
-import org.mockito.*;
-import org.springframework.beans.factory.annotation.Autowired;
-
-import java.util.Optional;
-
-import static org.assertj.core.api.Assertions.*;
-import static org.mockito.Mockito.*;
 
 public class WebhookIngestServiceTest {
 
@@ -37,7 +43,8 @@ public class WebhookIngestServiceTest {
     void setUp() {
         MockitoAnnotations.openMocks(this);
         testMetrics = new IngestMetrics();
-        testService = new WebhookIngestService(testRepo, testMetrics, deadLetterRepo, deadLetterService);
+        //testService = new WebhookIngestService(testRepo, testMetrics, deadLetterRepo, deadLetterService);
+        testService = new WebhookIngestService(testRepo, testMetrics, deadLetterService);
     }
 
     @Test
@@ -76,7 +83,6 @@ public class WebhookIngestServiceTest {
     void ingest_failure_createsDeadLetterEvent() {
         String key = "dlq_test_key";
         String ip = "127.0.0.1";
-        long initialDlqCount = deadLetterRepo.count();
 
         //empty userMessage will throw error
         Throwable thrown = catchThrowable(() ->
@@ -89,15 +95,14 @@ public class WebhookIngestServiceTest {
         );
 
         assertThat(thrown).isInstanceOf(IllegalArgumentException.class);
-        assertThat(deadLetterRepo.count())
-                .isEqualTo(initialDlqCount + 1);
-
-        DeadLetterEvent dlq =
-                deadLetterRepo.findAll().get((int) initialDlqCount);
-
-        assertThat(dlq.getId()).isEqualTo(key);
-        assertThat(dlq.getClientIp()).isEqualTo(ip);
-        assertThat(dlq.getFailureReason()).contains("IllegalArgumentException");
+        
+        // Verify that deadLetterService.record() was called with correct event
+        ArgumentCaptor<DeadLetterEvent> eventCaptor = ArgumentCaptor.forClass(DeadLetterEvent.class);
+        verify(deadLetterService).record(eventCaptor.capture());
+        
+        DeadLetterEvent capturedEvent = eventCaptor.getValue();
+        assertThat(capturedEvent.getRequestKey()).isEqualTo(key);
+        assertThat(capturedEvent.getClientIp()).isEqualTo(ip);
+        assertThat(capturedEvent.getFailureReason()).contains("IllegalArgumentException");
     }
-
 }

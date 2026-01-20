@@ -3,7 +3,7 @@ package com.kevin.pipeline.service;
 import com.kevin.pipeline.entity.DeadLetterEvent;
 import com.kevin.pipeline.metrics.IngestMetrics;
 import com.kevin.pipeline.repository.DeadLetterRepository;
-import jakarta.transaction.Transactional;
+import org.springframework.transaction.annotation.Transactional;
 import org.springframework.stereotype.Service;
 import com.kevin.pipeline.repository.IngestRepository;
 import com.kevin.pipeline.entity.WebhookEvent;
@@ -16,17 +16,17 @@ public class WebhookIngestService {
 
 	private final IngestRepository ingestRepository;
 	private final IngestMetrics ingestMetrics;
-	private final DeadLetterRepository deadLetterRepo;
+	//private final DeadLetterRepository deadLetterRepo;
 	private final DeadLetterService deadLetterService;
 
 
 	public WebhookIngestService(IngestRepository ingestRepo,
 								IngestMetrics ingestMetrics,
-								DeadLetterRepository deadLetterRepo,
+								//DeadLetterRepository deadLetterRepo,
 								DeadLetterService deadLetterService) {
 		this.ingestRepository = ingestRepo;
 		this.ingestMetrics = ingestMetrics;
-        this.deadLetterRepo = deadLetterRepo;
+        //this.deadLetterRepo = deadLetterRepo;
 		this.deadLetterService = deadLetterService;
     }
 
