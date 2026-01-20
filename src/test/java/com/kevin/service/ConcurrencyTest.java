@@ -35,12 +35,13 @@ class ConcurrencyTest {
 
         String key = "ky_test";
         String ip = "127.0.0.1";
+        String payload = "{\"message\": \"Hello\"}";
 
         for (int i = 0; i < 5; i++) {
             executor.submit(() -> {
                 try {
                     start.await();
-                    WebhookIngestService.ingest(key, ip, "Kevin", "Hello");
+                    WebhookIngestService.ingest(key, ip, payload);
                 } catch (Throwable t) {
                     failures.add(t);
                 } finally {

@@ -1,10 +1,16 @@
 package com.kevin.pipeline.controller;
 
+import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RestController;
+
 import com.kevin.pipeline.model.WebhookRequest;
 import com.kevin.pipeline.service.WebhookIngestService;
+
 import jakarta.servlet.http.HttpServletRequest;
-import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.*;
 
 @RestController
 @RequestMapping("/webhooks")
@@ -26,9 +32,8 @@ public class WebhookController {
 
         webhookService.ingest(
                 request.getEventID(),
-                request.getPayloadType(),
-                request.getPayload(),
-                clientIp
+                clientIp,
+                request.getPayload()
         );
         return ResponseEntity.accepted().build();
     }

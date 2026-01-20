@@ -51,11 +51,12 @@ public class WebhookIngestServiceTest {
     void ingest_newRequest_createsRecord_andIncrementsCreatedMetric() {
         String key = "ky_test";
         String ip = "127.0.0.1";
+        String payload = "{\"message\": \"Hello\"}";
 
         when(testRepo.findByRequestKey(key)).thenReturn(Optional.empty());
-        WebhookEvent saved = new WebhookEvent(key, ip, "Kevin", "Hello");
+        WebhookEvent saved = new WebhookEvent(key, ip, payload);
         when(testRepo.save(any())).thenReturn(saved);
-        WebhookEvent result = testService.ingest(key, ip, "Kevin", "Hello");
+        WebhookEvent result = testService.ingest(key, ip, payload);
 
         assertThat(result).isNotNull();
 
@@ -68,10 +69,11 @@ public class WebhookIngestServiceTest {
     void ingest_existingRequest_returnsExisting_andIncrementsReplayMetric() {
         String key = "ky_test";
         String ip = "127.0.0.1";
+        String payload = "{\"message\": \"Hello\"}";
 
-        WebhookEvent existing = new WebhookEvent(key, ip, "Kevin", "Hello");
+        WebhookEvent existing = new WebhookEvent(key, ip, payload);
         when(testRepo.findByRequestKey(key)).thenReturn(Optional.of(existing));
-        WebhookEvent result = testService.ingest(key, ip, "Kevin", "Hello");
+        WebhookEvent result = testService.ingest(key, ip, payload);
 
         assertThat(result).isSameAs(existing);
         verify(testRepo, never()).save(any());
@@ -84,12 +86,11 @@ public class WebhookIngestServiceTest {
         String key = "dlq_test_key";
         String ip = "127.0.0.1";
 
-        //empty userMessage will throw error
+        //empty payload will throw error
         Throwable thrown = catchThrowable(() ->
                 testService.ingest(
                         key,
                         ip,
-                        "Kevin",
                         ""
                 )
         );

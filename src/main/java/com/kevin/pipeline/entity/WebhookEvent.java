@@ -1,7 +1,14 @@
 package com.kevin.pipeline.entity;
 
-import jakarta.persistence.*;
 import java.time.Instant;
+
+import jakarta.persistence.Column;
+import jakarta.persistence.Entity;
+import jakarta.persistence.GeneratedValue;
+import jakarta.persistence.GenerationType;
+import jakarta.persistence.Id;
+import jakarta.persistence.Table;
+import jakarta.persistence.UniqueConstraint;
 
 @Entity
 @Table(name = "KY_DB", uniqueConstraints = {@UniqueConstraint(columnNames = "request_key")})
@@ -18,8 +25,7 @@ public class WebhookEvent {
     @Column(unique = true, nullable = false)
     private String requestKey;
 
-    private String userName;
-    private String userMessage;
+    private String payload;
 
     public WebhookEvent() {
         this.createdAt = Instant.now();
@@ -30,20 +36,18 @@ public class WebhookEvent {
         this.clientIp = clientIp;
     }
 
-    public WebhookEvent(String clientIp, String name, String message) {
+    public WebhookEvent(String clientIp, String payload) {
         //this.id = UUID.randomUUID().toString();
         this.createdAt = Instant.now();
         this.clientIp = clientIp;
-        this.userName = name;
-        this.userMessage = message;
+        this.payload = payload;
     }
 
-    public WebhookEvent(String requestKey, String clientIp, String name, String message) {
+    public WebhookEvent(String requestKey, String clientIp, String payload) {
         //this.id = requestKey;
         this.createdAt = Instant.now();
         this.clientIp = clientIp;
-        this.userName = name;
-        this.userMessage = message;
+        this.payload = payload;
         this.requestKey = requestKey;
     }
 
@@ -59,10 +63,6 @@ public class WebhookEvent {
     public String getRequestKey(){return this.requestKey;}
     public void setRequestKey(String key) { this.requestKey = key; }
     
-    public String getUserName() { return this.userName; }
-    public void setUserName(String newName) {this.userName = newName; }
-    
-    public String getUserMessage() { return this.userMessage; }
-    public void setUserMessage(String newMessage) {this.userMessage = newMessage; }
-
+    public String getPayload() { return this.payload; }
+    public void setPayload(String newPayload) {this.payload = newPayload; }
 }

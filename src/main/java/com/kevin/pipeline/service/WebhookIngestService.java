@@ -1,15 +1,16 @@
 package com.kevin.pipeline.service;
 
-import com.kevin.pipeline.entity.DeadLetterEvent;
-import com.kevin.pipeline.metrics.IngestMetrics;
-import com.kevin.pipeline.repository.DeadLetterRepository;
-import org.springframework.transaction.annotation.Transactional;
-import org.springframework.stereotype.Service;
-import com.kevin.pipeline.repository.IngestRepository;
-import com.kevin.pipeline.entity.WebhookEvent;
 import java.time.Instant;
 import java.util.List;
 import java.util.Optional;
+
+import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
+
+import com.kevin.pipeline.entity.DeadLetterEvent;
+import com.kevin.pipeline.entity.WebhookEvent;
+import com.kevin.pipeline.metrics.IngestMetrics;
+import com.kevin.pipeline.repository.IngestRepository;
 
 @Service
 public class WebhookIngestService {
@@ -34,15 +35,12 @@ public class WebhookIngestService {
 	public WebhookEvent ingest(
 			String key,
 			String ip,
-			String userName,
-			String userMessage
+			String payload
 	) {
 
-		System.out.println("AHHHHH 1");
 		try {
-			if (userName == null || userName.isBlank()
-					|| userMessage == null || userMessage.isBlank()) {
-				throw new IllegalArgumentException("Name and message required");
+			if (payload == null || payload.isBlank()) {
+				throw new IllegalArgumentException("Payload required");
 			}
 
 			if (key == null || key.isBlank()) {
@@ -67,7 +65,7 @@ public class WebhookIngestService {
 				}
 			}
 
-			WebhookEvent record = new WebhookEvent(ip, userName, userMessage);
+			WebhookEvent record = new WebhookEvent(ip, payload);
 			record.setRequestKey(key);
 			record.setCreatedAt(now);
 			this.ingestMetrics.recordCreated();
@@ -79,7 +77,7 @@ public class WebhookIngestService {
 			DeadLetterEvent dlq = new DeadLetterEvent(
 					key,
 					ip,
-					userMessage,
+					payload,
 					e.getClass().getSimpleName() + ": " + e.getMessage()
 			);
 

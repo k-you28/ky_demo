@@ -7,3 +7,12 @@ SELECT * FROMKY_DB  KY_DB [42000-224]
 2026-01-15 21:15:04.091003-06:00 jdbc[13]: exception
 org.h2.jdbc.JdbcSQLSyntaxErrorException: Syntax error in SQL statement "[*]DEL * FROM KY_DB"; expected "DELETE, DROP"; SQL statement:
 DEL * FROM KY_DB [42001-224]
+2026-01-19 19:40:44.160029-06:00 jdbc[13]: exception
+org.h2.jdbc.JdbcSQLSyntaxErrorException: Syntax error in SQL statement "DELETE [*]* FROM KY_DB"; expected "identifier"; SQL statement:
+DELETE * FROM KY_DB [42001-224]
+2026-01-19 19:40:49.093505-06:00 jdbc[13]: exception
+org.h2.jdbc.JdbcSQLSyntaxErrorException: Syntax error in SQL statement "[*]DEL * FROM KY_DB"; expected "DELETE, DROP"; SQL statement:
+DEL * FROM KY_DB [42001-224]
+2026-01-19 19:40:59.449380-06:00 jdbc[13]: exception
+org.h2.jdbc.JdbcSQLSyntaxErrorException: Syntax error in SQL statement "DELETE [*]* FROM KY_DB"; expected "identifier"; SQL statement:
+DELETE * FROM KY_DB [42001-224]
