@@ -60,7 +60,7 @@ public class WebhookPipelineTester {
     private static boolean testWebhookConcurrency(HttpClient client) {
         ExecutorService executor = Executors.newFixedThreadPool(5);
 
-        for (int i = 0; i < 100; i++) {
+        for (int i = 0; i < 100000; i++) {
             executor.submit(() -> {
                 sendWebhook(client, "evt_concurrent_001");
                 return null;

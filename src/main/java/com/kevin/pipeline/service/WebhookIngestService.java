@@ -47,15 +47,31 @@ public class WebhookIngestService {
 				throw new IllegalArgumentException("Idempotency key required");
 			}
 
-			//System.out.println("Processing request with key " + key);
-			Optional<WebhookEvent> existing = ingestRepository.findByRequestKey(key);
-			if (existing.isPresent()) {
-				this.ingestMetrics.recordReplayed();
-				return existing.get();
+			Instant now = Instant.now();
+			Optional<WebhookEvent> existingOpt = ingestRepository.findByRequestKey(key);
+			if (existingOpt.isPresent()) {
+				WebhookEvent existing = existingOpt.get();
+
+				if (existing.getPayload().equals(payload)) {
+					// Same payload, treat as replay
+					this.ingestMetrics.recordReplayed();
+					return existing;
+				} else {
+					// Different payload, allow overwrite only if older than 2 seconds
+					if (existing.getCreatedAt().plusSeconds(2).isAfter(now)) {
+						ingestMetrics.recordRateLimited();
+						throw new IllegalStateException("Rate limit exceeded - attempted overwrite too soon");
+					}
+					// Overwrite existing record
+					existing.setPayload(payload);
+					existing.setCreatedAt(now);
+					this.ingestMetrics.recordCreated();
+					return ingestRepository.save(existing);
+				}
 			}
 
 			Optional<WebhookEvent> lastRecordOpt = ingestRepository.findTopByClientIpOrderByCreatedAtDesc(ip);
-			Instant now = Instant.now();
+
 
 			if (lastRecordOpt.isPresent()) {
 				Instant lastTime = lastRecordOpt.get().getCreatedAt();

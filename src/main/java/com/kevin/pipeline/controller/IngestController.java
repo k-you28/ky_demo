@@ -15,7 +15,7 @@ import com.kevin.pipeline.service.WebhookIngestService;
 import jakarta.servlet.http.HttpServletRequest;
 
 @RestController
-@RequestMapping("/webhook")
+@RequestMapping("/ingest")
 public class IngestController {
 
     private final WebhookIngestService WebhookIngestService;

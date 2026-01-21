@@ -54,15 +54,15 @@ public class WebhookEvent {
     public String getId() {return id;}
     public void setId(String newID){this.id = newID;}
 
-    public Instant getCreatedAt() {return createdAt;}
-    public void setCreatedAt(Instant newTime){} //Leaving unimplemented, no reason to change created time
+    public String getRequestKey(){return this.requestKey;}
+    public void setRequestKey(String key) { this.requestKey = key; }
 
     public String getClientIp() { return clientIp; }
     public void setClientIp(){} //No reason to change IP manually
 
-    public String getRequestKey(){return this.requestKey;}
-    public void setRequestKey(String key) { this.requestKey = key; }
-    
+    public Instant getCreatedAt() {return createdAt;}
+    public void setCreatedAt(Instant newTime){}
+
     public String getPayload() { return this.payload; }
     public void setPayload(String newPayload) {this.payload = newPayload; }
 }
