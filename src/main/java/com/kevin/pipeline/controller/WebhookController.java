@@ -23,7 +23,8 @@ public class WebhookController {
     }
 
     @PostMapping("/{source}")
-    public ResponseEntity<Void> receiveWebhook(
+    //public ResponseEntity<Void> receiveWebhook(
+    public String receiveWebhook(
             @PathVariable String source,
             @RequestBody WebhookRequest request,
             HttpServletRequest servletRequest
@@ -35,7 +36,8 @@ public class WebhookController {
                 clientIp,
                 request.getPayload()
         );
-        return ResponseEntity.accepted().build();
+        //return ResponseEntity.accepted().build();
+        return request.getEventID() + "\n";
     }
 
     private String extractClientIp(HttpServletRequest request) {

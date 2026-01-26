@@ -1,0 +1,17 @@
+POST COMMAND TESTER:
+
+curl -X POST http://localhost:8080/webhooks/stripe \
+  -H "Content-Type: application/json" \
+  -H "X-Forwarded-For: 203.0.113.42" \
+  -d '{
+    "eventId": "evt_proxy_test",
+    "eventType": "proxy",
+    "payload": "{1.25.26 TESTING}"
+  }'
+
+
+curl -X POST http://localhost:8080/webhooks/stripe \
+  -H "Content-Type: application/json" \
+  -H "X-Forwarded-For: 203.0.113.42" \
+  -d '{"eventId": "evt_test_1", "eventType": "proxy",  "payload": "{1.25.26 TESTING}"}'
+

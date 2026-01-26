@@ -23,9 +23,10 @@ public class WebhookPipelineTester {
     public static boolean webhookTester(HttpClient client) throws Exception {
 
         //Test 1: Accepts two duplicate events
-        if(sendWebhook(client, "evt_java_001") != 202
-                || sendWebhook(client, "evt_java_001") != 202){
-            System.out.println("Test 1 fail");
+        int event1Status = sendWebhook(client, "evt_java_001");
+        int event2Status = sendWebhook(client, "evt_java_001");
+        if(event1Status != 200 || event2Status != 200){
+            System.out.println("Status1 = " + event1Status + "\nStatus2 = " + event2Status);
         }
 
         //Test 2: Concurrency. Takes in 5 requests at once. Will always return true

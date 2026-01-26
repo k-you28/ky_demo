@@ -62,7 +62,6 @@ public class WebhookIngestService {
 						ingestMetrics.recordRateLimited();
 						throw new IllegalStateException("Rate limit exceeded - attempted overwrite too soon");
 					}
-					// Overwrite existing record
 					existing.setPayload(payload);
 					existing.setCreatedAt(now);
 					this.ingestMetrics.recordCreated();
@@ -86,9 +85,9 @@ public class WebhookIngestService {
 			record.setCreatedAt(now);
 			this.ingestMetrics.recordCreated();
 			return ingestRepository.save(record);
-		} catch (Exception e) {
-			System.out.println("AHHHHH 2");
 
+		} catch (Exception e) {
+			System.out.println("Exception caught in ingest - Event ID: " + key + ", Exception: " + e.getClass().getSimpleName() + " - " + e.getMessage());
 			ingestMetrics.recordDeadLetter();
 			DeadLetterEvent dlq = new DeadLetterEvent(
 					key,
@@ -97,8 +96,9 @@ public class WebhookIngestService {
 					e.getClass().getSimpleName() + ": " + e.getMessage()
 			);
 
-			System.out.println("AHHHHH 3");
+			System.out.println("Calling deadLetterService.record() for key: " + key);
 			deadLetterService.record(dlq);
+			System.out.println("deadLetterService.record() completed for key: " + key);
 			throw e;
 		}
 	}
