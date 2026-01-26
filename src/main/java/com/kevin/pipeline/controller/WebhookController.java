@@ -1,16 +1,19 @@
 package com.kevin.pipeline.controller;
 
 import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.kevin.pipeline.model.WebhookRequest;
 import com.kevin.pipeline.service.WebhookIngestService;
 
 import jakarta.servlet.http.HttpServletRequest;
+
 
 @RestController
 @RequestMapping("/webhooks")
@@ -20,6 +23,16 @@ public class WebhookController {
 
     public WebhookController(WebhookIngestService webhookService) {
         this.webhookService = webhookService;
+    }
+
+    @GetMapping("/{source}")
+    public ResponseEntity<?> getWebhookByrequestKey(
+            @PathVariable String source,
+            @RequestParam String requestKey
+    ) {
+        return webhookService.getByrequestKey(requestKey)
+                .map(event -> ResponseEntity.ok(event))
+                .orElse(ResponseEntity.notFound().build());
     }
 
     @PostMapping("/{source}")
@@ -32,12 +45,12 @@ public class WebhookController {
         String clientIp = extractClientIp(servletRequest);
 
         webhookService.ingest(
-                request.getEventID(),
+                request.getrequestKey(),
                 clientIp,
                 request.getPayload()
         );
         //return ResponseEntity.accepted().build();
-        return request.getEventID() + "\n";
+        return request.getrequestKey() + "\n";
     }
 
     private String extractClientIp(HttpServletRequest request) {

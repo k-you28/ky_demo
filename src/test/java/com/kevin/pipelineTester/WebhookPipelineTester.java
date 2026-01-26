@@ -36,14 +36,14 @@ public class WebhookPipelineTester {
     }
 
 
-    private static int sendWebhook(HttpClient client, String eventId) throws Exception {
+    private static int sendWebhook(HttpClient client, String requestKey) throws Exception {
         String body = """
             {
-              "eventId": "%s",
+              "requestKey": "%s",
               "eventType": "payment_intent.succeeded",
               "payload": "{ \\"amount\\": 5000 }"
             }
-            """.formatted(eventId);
+            """.formatted(requestKey);
 
         HttpRequest request = HttpRequest.newBuilder()
                 .uri(URI.create(BASE_URL))

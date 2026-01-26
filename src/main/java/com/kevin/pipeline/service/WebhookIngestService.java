@@ -108,6 +108,11 @@ public class WebhookIngestService {
 		return this.ingestRepository.findAll();
 	}
 
+	//Get webhook event by requestKey (requestKey)
+	public Optional<WebhookEvent> getByrequestKey(String requestKey) {
+		return this.ingestRepository.findByRequestKey(requestKey);
+	}
+
 	//Extract client ip
 	public String getClientIP(String clientIp) {
 		WebhookEvent record = new WebhookEvent(clientIp);

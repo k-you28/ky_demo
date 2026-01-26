@@ -4,29 +4,29 @@ import com.fasterxml.jackson.annotation.JsonProperty;
 
 public class WebhookRequest {
 
-	@JsonProperty("eventId")
-	private String eventID;
+	@JsonProperty("requestKey")
+	private String requestKey;
 
 	private String payloadType;
 	private String payload;
 
 	public WebhookRequest() {}
 	public WebhookRequest(String id, String payload) {
-		this.eventID = id;
+		this.requestKey = id;
 		this.payload = payload;
 		this.payloadType = null;
 	}
 
 	public WebhookRequest(String id, String payload, String payloadType) {
-		this.eventID = id;
+		this.requestKey = id;
 		this.payload = payload;
 		this.payloadType = payloadType;
 	}
 
-	public String getEventID() {
-		return this.eventID;
+	public String getrequestKey() {
+		return this.requestKey;
 	}
-	public void setEventID(String newID) { this.eventID = newID; }
+	public void setrequestKey(String newID) { this.requestKey = newID; }
 
 	public String getPayload() {
 		return this.payload;
