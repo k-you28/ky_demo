@@ -27,9 +27,12 @@ public class WebhookController {
 
     @GetMapping("/{source}")
     public ResponseEntity<?> getWebhookByrequestKey(
-            @PathVariable String source,
             @RequestParam String requestKey
     ) {
+
+        if (requestKey.isBlank()) {
+            return ResponseEntity.badRequest().body("Request key is required");
+        }
         return webhookService.getByrequestKey(requestKey)
                 .map(event -> ResponseEntity.ok(event))
                 .orElse(ResponseEntity.notFound().build());
