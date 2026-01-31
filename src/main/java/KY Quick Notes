@@ -1,17 +1,20 @@
 POST COMMAND TESTER:
 
-curl -X POST http://localhost:8080/webhooks/stripe \
-  -H "Content-Type: application/json" \
-  -H "X-Forwarded-For: 203.0.113.42" \
-  -d '{
-    "requestKey": "evt_proxy_test",
-    "eventType": "proxy",
-    "payload": "{1.25.26 TESTING}"
-  }'
-
-
+TEST GET/POST FOR MAIN REPO
 curl -X POST http://localhost:8080/webhooks/stripe \
   -H "Content-Type: application/json" \
   -H "X-Forwarded-For: 203.0.113.42" \
   -d '{"requestKey": "evt_test_1", "eventType": "proxy",  "payload": "{1.25.26 TESTING}"}'
 
+TEST API KEY CREATION
+curl -X POST http://localhost:8080/admin/api-keys \
+  -H "Content-Type: application/json" \
+  -d '{"name": "My First API Key"}'
+
+TEST API KEY DEACTIVATION
+curl -X DELETE http://localhost:8080/admin/api-keys/e0439103-173b-47f0-a747-64ee6a262251 \
+  -H "Content-Type: application/json"
+
+TEST API KEY LIST
+curl -X GET http://localhost:8080/admin/api-keys \
+  -H "Content-Type: application/json"

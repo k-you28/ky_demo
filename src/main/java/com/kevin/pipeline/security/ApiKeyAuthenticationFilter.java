@@ -1,22 +1,23 @@
 package com.kevin.pipeline.security;
 
-import com.kevin.pipeline.service.ApiKeyService;
-import jakarta.servlet.FilterChain;
-import jakarta.servlet.ServletException;
-import jakarta.servlet.http.HttpServletRequest;
-import jakarta.servlet.http.HttpServletResponse;
+import java.io.IOException;
+
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Component;
 import org.springframework.web.filter.OncePerRequestFilter;
 
-import java.io.IOException;
+import com.kevin.pipeline.service.ApiKeyService;
+
+import jakarta.servlet.FilterChain;
+import jakarta.servlet.ServletException;
+import jakarta.servlet.http.HttpServletRequest;
+import jakarta.servlet.http.HttpServletResponse;
 
 @Component
 public class ApiKeyAuthenticationFilter extends OncePerRequestFilter {
 
     private static final String API_KEY_HEADER = "X-API-Key";
     private static final String AUTH_HEADER = "Authorization";
-
     private final ApiKeyService apiKeyService;
 
     public ApiKeyAuthenticationFilter(ApiKeyService apiKeyService) {

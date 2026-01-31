@@ -1,12 +1,20 @@
 package com.kevin.pipeline.controller;
 
-import com.kevin.pipeline.entity.ApiKey;
-import com.kevin.pipeline.service.ApiKeyService;
+import java.util.List;
+import java.util.Map;
+
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.*;
+import org.springframework.web.bind.annotation.DeleteMapping;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RestController;
 
-import java.util.Map;
+import com.kevin.pipeline.entity.ApiKey;
+import com.kevin.pipeline.service.ApiKeyService;
 
 @RestController
 @RequestMapping("/admin/api-keys")
@@ -38,5 +46,14 @@ public class ApiKeyController {
     public ResponseEntity<Void> deactivateApiKey(@PathVariable String id) {
         apiKeyService.deactivateApiKey(id);
         return ResponseEntity.noContent().build();
+    }
+
+    /**
+     * Get all API keys
+     * GET /admin/api-keys
+     */
+    @GetMapping
+    public ResponseEntity<List<ApiKey>> getApiKeys() {
+        return apiKeyService.getApiKeys();
     }
 }

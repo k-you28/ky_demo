@@ -1,13 +1,16 @@
 package com.kevin.pipeline.service;
 
-import com.kevin.pipeline.entity.ApiKey;
-import com.kevin.pipeline.repository.ApiKeyRepository;
+import java.time.Instant;
+import java.util.List;
+import java.util.Optional;
+import java.util.UUID;
+
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.time.Instant;
-import java.util.Optional;
-import java.util.UUID;
+import com.kevin.pipeline.entity.ApiKey;
+import com.kevin.pipeline.repository.ApiKeyRepository;
 
 @Service
 public class ApiKeyService {
@@ -53,7 +56,7 @@ public class ApiKeyService {
      */
     private String generateApiKey() {
         // Generate a UUID-based API key with prefix
-        return "ky_" + UUID.randomUUID().toString().replace("-", "");
+        return "KY_" + UUID.randomUUID().toString().replace("-", "");
     }
 
     /**
@@ -65,5 +68,11 @@ public class ApiKeyService {
             key.setActive(false);
             apiKeyRepository.save(key);
         });
+    }
+    /**
+     * Get all API keys
+     */
+    public ResponseEntity<List<ApiKey>> getApiKeys() {
+        return ResponseEntity.ok(apiKeyRepository.findAll());
     }
 }
