@@ -18,6 +18,7 @@ public class ApiKeyAuthenticationFilter extends OncePerRequestFilter {
 
     private static final String API_KEY_HEADER = "X-API-Key";
     private static final String AUTH_HEADER = "Authorization";
+
     private final ApiKeyService apiKeyService;
 
     public ApiKeyAuthenticationFilter(ApiKeyService apiKeyService) {
@@ -31,11 +32,11 @@ public class ApiKeyAuthenticationFilter extends OncePerRequestFilter {
             FilterChain filterChain
     ) throws ServletException, IOException {
 
-        // Only apply authentication to GET requests to /webhooks
+        // Require API key for both GET and POST to /webhooks
         String path = request.getRequestURI();
         String method = request.getMethod();
 
-        if (path.startsWith("/webhooks") && "GET".equals(method)) {
+        if (path.startsWith("/webhooks") && ("GET".equals(method) || "POST".equals(method))) {
             String apiKey = extractApiKey(request);
 
             if (apiKey == null || !apiKeyService.isValid(apiKey)) {

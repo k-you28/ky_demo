@@ -4,7 +4,11 @@ TEST GET/POST FOR MAIN REPO
 curl -X POST http://localhost:8080/webhooks/stripe \
   -H "Content-Type: application/json" \
   -H "X-Forwarded-For: 203.0.113.42" \
-  -d '{"requestKey": "evt_test_1", "eventType": "proxy",  "payload": "{1.25.26 TESTING}"}'
+  -d '{"requestKey": "evt_test_1", 
+  "eventType": "proxy",  
+  "payload": "{KY 1.31.26 TESTING}"}' \
+  -H "X-API-Key: KY_45b60d4d3661468aae6d24e0e472fcf3"
+
 
 TEST API KEY CREATION
 curl -X POST http://localhost:8080/admin/api-keys \
