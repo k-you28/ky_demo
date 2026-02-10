@@ -6,7 +6,9 @@ curl -X POST http://localhost:8080/webhooks/stripe \
   -H "X-Forwarded-For: 203.0.113.42" \
   -d '{"requestKey": "evt_test_1", 
   "eventType": "proxy",  
-  "payload": "{KY 1.31.26 TESTING}"}' \
+  "payload": "{"Job Type": "Software",
+                "Date Applied": "2.7.26"
+                }' \
   -H "X-API-Key: KY_45b60d4d3661468aae6d24e0e472fcf3"
 
 
