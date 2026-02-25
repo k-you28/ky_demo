@@ -1,22 +1,30 @@
-name: CI Test
+name: Job App CI Test
 
 on:
   pull_request:
     branches: ["main"]
+    paths:
+      - "job-application-tracker/**"
   push:
     branches: ["main"]
+    paths:
+      - "job-application-tracker/**"
   workflow_dispatch:
 
 concurrency:
-  group: ci-test-${{ github.ref }}
+  group: job-app-ci-${{ github.ref }}
   cancel-in-progress: true
 
 jobs:
   test:
-    name: Run Tests
+    name: Run Job App Tests
     runs-on: ubuntu-latest
     permissions:
       contents: read
+
+    defaults:
+      run:
+        working-directory: job-application-tracker
 
     steps:
       - name: Checkout
@@ -39,7 +47,7 @@ jobs:
         if: always()
         uses: actions/upload-artifact@v4
         with:
-          name: test-reports
+          name: job-app-test-reports
           path: |
-            build/reports/tests/test
-            build/test-results/test
+            job-application-tracker/build/reports/tests/test
+            job-application-tracker/build/test-results/test
