@@ -1,0 +1,4 @@
+rootProject.name = 'ky_demo'
+
+include('job-application-tracker')
+project(':job-application-tracker').projectDir = file('job-application-tracker')

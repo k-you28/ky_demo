@@ -1,0 +1,23 @@
+plugins {
+    id 'base'
+}
+
+tasks.named('build') {
+    dependsOn(':job-application-tracker:build')
+}
+
+tasks.named('clean') {
+    dependsOn(':job-application-tracker:clean')
+}
+
+tasks.register('test') {
+    group = 'verification'
+    description = 'Runs tests for the job application tracker project.'
+    dependsOn(':job-application-tracker:test')
+}
+
+tasks.register('bootJar') {
+    group = 'build'
+    description = 'Builds the runnable Spring Boot jar for the job application tracker project.'
+    dependsOn(':job-application-tracker:bootJar')
+}
